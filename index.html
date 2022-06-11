@@ -12,12 +12,23 @@
         <p> Look up any city and learn about the weather conditions for the next 5 days!</p>
     </header>
 
-    <div>
+    <div class="ctysrch">
         <h2>Select City</h2>
-        <form class=city>
+        <form class=lctn>
             <label for="city">City Name:</label>
             <input type="text"  id="city" name="city" placeholder="Enter city here"><br>
+            <input type="submit" value="Find Weather">
         </form>
+    </div>
+    <div class="allctysrch">
+        <h2>Cities Previously Searched</h2>
+        <ul class="searched">
+            <li class="lctn-name"></li>
+        </ul>
+    </div>
+    <div class="crrntctywthr">
+        <h1>Current City Weather</h1>
+        <div class="ctyinfo"></div>
     </div>
 </body>
 </html>
