@@ -3,6 +3,17 @@ var btn = $(".btn");
 var lctn = $(".lctn");
 var dycntnr = $("#thiswthr");
 
+var svecity = function (userinput) {
+    var prevcty = $('a');
+    var ctysrch = $(".searched")
+
+  console.log(userinput);
+  localStorage.setItem('city', userinput);
+  prevcty.attr('href', weatherinfo(city));
+  prevcty.append(userinput);
+  ctysrch.append(prevcty);
+}
+
 var weatherinfo = function (input) {
   var city = input;
   // console.log(city);
@@ -56,11 +67,15 @@ var dailyfrcst = function () {
         var nght = document.createElement("p");
         var wthrday = data.daily[i].temp.day;
         var wthrnght = data.daily[i].temp.night;
+        var cndtn = data.daily[i].weather[0].description;
+        var uvindx = data.daily[i].uvi;
         // var icongrb =  "https://openweathermap.org/img/wn/" + wthricn +".png";
 
-        daylg.setAttribute("class", "bg-info");
+        daylg.setAttribute("class", "bg-info rounded-corner");
         dy.append(wthrday);
         nght.append(wthrnght);
+        daylg.append(cndtn);
+        daylg.append(uvindx);
         daylg.append(dy);
         daylg.append(nght);
 
@@ -80,14 +95,12 @@ var dailyfrcst = function () {
     })
 }
 
-// dailyfrcst();
-
 //event listener for input box
 lctn.on("click", function(e) {
-  e.preventDefault();
+var prevcty = document.createElement('a');
+var ctysrch = $(".searched")
+   e.preventDefault();
 
-  weatherinfo(userinput.val())
+  weatherinfo(userinput.val());
+  svecity(userinput.val())
 });
-
-
-
