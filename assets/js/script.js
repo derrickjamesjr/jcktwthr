@@ -3,16 +3,8 @@ var btn = $(".btn");
 var lctn = $(".lctn");
 var dycntnr = $("#thiswthr");
 
-var svecity = function (userinput) {
-    var prevcty = $('a');
-    var ctysrch = $(".searched")
 
-  console.log(userinput);
-  localStorage.setItem('city', userinput);
-  prevcty.attr('href', weatherinfo(city));
-  prevcty.append(userinput);
-  ctysrch.append(prevcty);
-}
+// localStorage.getItem('city');
 
 var weatherinfo = function (input) {
   var city = input;
@@ -26,24 +18,26 @@ var weatherinfo = function (input) {
     .then(function (response) {
       return response.json();
     })
-    .then(function (data) {
-      // console.log(data.coord.lat, data.coord.lon);
+    .then(function(data) {
+      // console.log(data.lat, data.slon);
       // console.log(data);
-      localStorage.setItem("coordlat", data[0].lat);
-      localStorage.setItem("coordlon", data[0].lon);
-      // console.log(data);
-      // console.log(data[0].lat, data[0].lon);
+      localStorage.setItem("coordlt", data[0].lat);
+      localStorage.setItem("coordln", data[0].lon);
+      // console.log(data);]
+      console.log(data[0].lat,data[0].lon);
       dailyfrcst();
 
     })
 };
 
-var dailyfrcst = function () {
-  var lat = localStorage.getItem("coordlat");
-  var lon = localStorage.getItem("coordlon");
+var dailyfrcst = function(lat, lon) {
+  var lat = localStorage.getItem("coordlt");
+  var lon = localStorage.getItem("coordln");
+  // console.log(lat,lon);
   //get lat and lon from inputted city
+  
   var apistr = "https://api.openweathermap.org/data/2.5/onecall?lat=" + lat + "&lon=" + lon + "&exclude=hourly&units=imperial&appid=3e6e91e6c8387cdac97df82b9bc87d27";
-  // "https://api.openweathermap.org/data/2.5/onecall?lat=33.44&lon=94.04&exclude=hourly&units=imperial&appid=3e6e91e6c8387cdac97df82b9bc87d27"
+  
   var dsplywthr = $("#thiswthr");
 
 
@@ -52,30 +46,41 @@ var dailyfrcst = function () {
       return response.json();
     })
     .then(function (data) {
-      // console.log(data.coord.lat, data.coord.lon);
-      console.log(data);
+      // console.log(data.coord.lt, data.coord.ln);
+      // console.log(data);
       //used feels like to see if it's grabbing unique values
       // console.log(data.current.feels_like);
 
       for (var i = 0; i < 5; i++) {
 
-        var wthrrpt = data.daily[i];
-
-        // console.log(data.daily[i]);
+        var wthrrpt = data.daily[i];        
         var daylg = document.createElement("div");
-        var dy = document.createElement("p");
-        var nght = document.createElement("p");
+        var dy = document.createElement("div");
+        var nght = document.createElement("div");
+        var uvbox = document.createElement("div");
+        var wndspdbx = document.createElement("div");
+        var humidbx = document.createElement("div");
         var wthrday = data.daily[i].temp.day;
         var wthrnght = data.daily[i].temp.night;
         var cndtn = data.daily[i].weather[0].description;
         var uvindx = data.daily[i].uvi;
+        var humid = data.daily[i].humidity;
+        var wndspd = data.daily[i].wind_speed;
         // var icongrb =  "https://openweathermap.org/img/wn/" + wthricn +".png";
+        
+        dycntnr.innerHTML
 
-        daylg.setAttribute("class", "bg-info rounded-corner");
+
+        daylg.setAttribute("class", "bg-info col m-4 rounded");
         dy.append(wthrday);
         nght.append(wthrnght);
+        uvbox.append(uvindx);
+        wndspdbx.append(wndspd);
+        humidbx.append(humid);
         daylg.append(cndtn);
-        daylg.append(uvindx);
+        daylg.append(uvbox);
+        daylg.append(wndspdbx);
+        daylg.append(humidbx);
         daylg.append(dy);
         daylg.append(nght);
 
@@ -95,12 +100,27 @@ var dailyfrcst = function () {
     })
 }
 
+var svecity = function (userinput) {
+    var ctysrch = $(".searched");    
+    var ctylsthldr = document.createElement('ol');
+    var ctylst = document.createElement('li');
+    var prevcty = document.createElement('a');
+
+  // console.log(userinput);
+  localStorage.setItem('city', userinput);
+  prevcty.append(userinput);
+  prevcty.attr('href', weatherinfo(userinput));
+  ctylst.append(prevcty);
+  ctylsthldr.append(ctylst);
+
+  localStorage.getItem('city');
+}
+
 //event listener for input box
 lctn.on("click", function(e) {
-var prevcty = document.createElement('a');
-var ctysrch = $(".searched")
-   e.preventDefault();
-
+  
+  e.preventDefault();
+  dycntnr.innerHTML = '';
   weatherinfo(userinput.val());
   svecity(userinput.val())
 });
